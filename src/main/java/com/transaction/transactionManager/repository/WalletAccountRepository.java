@@ -2,8 +2,11 @@ package com.transaction.transactionManager.repository;
 
 import com.transaction.transactionManager.entity.WalletAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 /**
  * @author Divakar Verma
@@ -16,4 +19,12 @@ public interface WalletAccountRepository extends JpaRepository<WalletAccount,Str
 
     public WalletAccount findByVpa(String vpa);
     public WalletAccount findByAccountNumber(String accountNumber);
+
+    public WalletAccount findByWalletId(String walletId);
+
+    @Query("select w from WalletAccount w where w.balance > ?1")
+    public List<WalletAccount> findWalletAccountsByBalance(double balance);
+
+
+
 }

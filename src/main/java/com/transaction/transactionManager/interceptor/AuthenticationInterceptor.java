@@ -25,6 +25,16 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private BaseService baseService;
     private static String username;
 
+    private static String authToken;
+
+    public static String getAuthToken() {
+        return authToken;
+    }
+
+    public static void setAuthToken(String authToken) {
+        AuthenticationInterceptor.authToken = authToken;
+    }
+
     public static String getUsername() {
         return username;
     }
@@ -40,6 +50,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return true;
         }
         String token = request.getHeader("Authorization");
+        authToken = token;
         if(token!=null && token.startsWith("Bearer")){
             try {
                 token = token.substring(7);

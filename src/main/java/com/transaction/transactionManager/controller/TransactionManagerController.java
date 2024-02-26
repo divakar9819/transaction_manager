@@ -3,13 +3,12 @@ package com.transaction.transactionManager.controller;
 import com.transaction.transactionManager.exception.GlobalException;
 import com.transaction.transactionManager.exception.InsufficientWalletBalanceException;
 import com.transaction.transactionManager.payload.request.AddMoneyRequest;
+import com.transaction.transactionManager.payload.request.CardRequest;
 import com.transaction.transactionManager.payload.request.TransactionRequest;
 import com.transaction.transactionManager.payload.request.WalletAccountRequest;
-import com.transaction.transactionManager.payload.response.AddMoneyResponse;
-import com.transaction.transactionManager.payload.response.ApiResponse;
-import com.transaction.transactionManager.payload.response.TransactionResponse;
-import com.transaction.transactionManager.payload.response.WalletAccountResponse;
+import com.transaction.transactionManager.payload.response.*;
 import com.transaction.transactionManager.transactionService.AddMoneyService;
+import com.transaction.transactionManager.transactionService.CardService;
 import com.transaction.transactionManager.transactionService.TransactionService;
 import com.transaction.transactionManager.transactionService.WalletAccountService;
 import jakarta.validation.Valid;
@@ -44,6 +43,9 @@ public class TransactionManagerController {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private CardService cardService;
+
     @GetMapping("/home")
     public String home(){
         return "Transaction manager home";
@@ -75,6 +77,13 @@ public class TransactionManagerController {
                 .defaultIfEmpty(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
+    @PostMapping("/cardTransaction")
+    public Mono<ResponseEntity<CardResponse>> doCardTransaction(@RequestBody CardRequest cardRequest){
+        return cardService.doCardTransaction(cardRequest)
+                .map(cardResponse -> ResponseEntity.status(HttpStatus.CREATED).body(cardResponse))
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    }
+
     public Map<String , String> createValidationErrorResponse(BindingResult bindingResult){
         Map<String,String> errors = new HashMap<>();
         for(FieldError fieldError : bindingResult.getFieldErrors()){
@@ -84,5 +93,6 @@ public class TransactionManagerController {
         }
         return errors;
     }
+
 
 }

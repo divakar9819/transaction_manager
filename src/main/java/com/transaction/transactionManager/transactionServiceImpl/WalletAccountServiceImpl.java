@@ -19,6 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static com.transaction.transactionManager.interceptor.AuthenticationInterceptor.getUsername;
@@ -76,6 +77,11 @@ public class WalletAccountServiceImpl implements WalletAccountService {
                 });
     }
 
+    @Override
+    public Mono<List<WalletAccount>> findAllWalletAccountsByBalance(double balance) {
+        List<WalletAccount> walletAccountList = walletAccountRepository.findWalletAccountsByBalance(balance);
+        return Mono.just(walletAccountList);
+    }
 
 
     public Mono<UserResponse> getUserByUsername(String username){

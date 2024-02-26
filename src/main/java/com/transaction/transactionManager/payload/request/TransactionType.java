@@ -8,5 +8,7 @@ package com.transaction.transactionManager.payload.request;
 public enum TransactionType {
     A2W,
     W2B,
-    W2W
+    W2W,
+    B2B,
+    W2C
 }
